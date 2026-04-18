@@ -82,13 +82,23 @@ extraSpecialArgs = {
 
 主なフラグは次のとおりです。
 
-- `desktop` / `server`: どちらか片方だけ `true`
+- `desktop`: GUI / デスクトップ向け設定を有効化
 - `fonts`: `true` で fontconfig と Nerd Font を有効化
 - `extended`: 追加の CLI ツールを有効化
 - `dev`: 値が大きいほど開発向け設定を拡張
 - `wsl`: WSL 向け分岐に使用
 
-`home.nix` では `features.desktop != features.server` を検証しています。
+既定値:
+
+```nix
+features = {
+  desktop = false;
+  fonts = false;
+  extended = false;
+  dev = 1;
+  wsl = false;
+};
+```
 
 ## 境界
 
@@ -137,8 +147,7 @@ extraSpecialArgs = {
       username = "user";
       homeDirectory = "/home/user";
       features = {
-        desktop = true;
-        server = false;
+        desktop = false;
         fonts = false;
         extended = false;
         dev = 1;

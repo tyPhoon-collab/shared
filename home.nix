@@ -1,19 +1,23 @@
-{
+args@{
   config,
   pkgs,
   lib,
   username,
   homeDirectory,
-  features,
+  features ? { },
   ...
 }:
+let
+  features = {
+    desktop = false;
+    fonts = false;
+    extended = false;
+    dev = 1;
+    wsl = false;
+  } // args.features;
+in
 {
-  assertions = [
-    {
-      assertion = features.desktop != features.server;
-      message = "Exactly one of features.desktop or features.server must be true";
-    }
-  ];
+  _module.args.features = features;
 
   imports = [
     ./modules/shell/shell.nix
