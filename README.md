@@ -135,9 +135,27 @@ in
 - マシンごとに変わるポリシー
 - 秘密情報
 
+`git` と `jujutsu` についても、ユーザー名やメールアドレスのような個人識別情報は shared 側では持ちません。各利用側の flake で追記してください。
+
+```nix
+{
+  programs.git = {
+    userName = "Your Name";
+    userEmail = "you@example.com";
+  };
+
+  programs.jujutsu.settings = {
+    user.name = "Your Name";
+    user.email = "you@example.com";
+  };
+}
+```
+
 ## 補足
 
 `modules/system/darwin-defaults.nix` は、必要なら親リポジトリ側で直接 import して使えます。
+
+このモジュールを取り込んで `system.defaults` を適用する場合、`darwin-rebuild` を実行するターミナルや Nix 関連プロセスに Full Disk Access が必要になることがあります。
 
 ## 最小例
 
