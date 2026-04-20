@@ -29,6 +29,12 @@
       lazyjj-nvim
     ];
 
+    extraConfigLuaPost = ''
+      require("lazyjj").setup({
+        mapping = false,
+      })
+    '';
+
     keymaps = [
       {
         mode = "n";
