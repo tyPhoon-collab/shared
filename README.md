@@ -88,6 +88,25 @@ import 例:
 
 加えて、Home Manager が通常渡す `pkgs` や `lib` を利用します。
 
+## Home Manager のシステム統合
+
+NixOS / nix-darwin に Home Manager を組み込む場合は、共通の既定値として
+`lib/home-manager.nix` の `default` を利用できます。
+
+```nix
+let
+  sharedHomeManager = import (shared + /lib/home-manager.nix);
+in
+{
+  home-manager = sharedHomeManager.default // {
+    users.${username} = import ./home.nix;
+    extraSpecialArgs = mkExtraArgs username homeDirectory features;
+  };
+}
+```
+
+取り込み側で同じ属性を書いた場合は、取り込み側の値が優先されます。
+
 ## feature フラグ
 
 主なフラグは次のとおりです。
