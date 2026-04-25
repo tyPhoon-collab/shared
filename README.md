@@ -55,7 +55,9 @@ import 例:
 
 - `home.nix`: 共有エントリーポイント
 - `modules/`: Home Manager / platform 向けモジュール
+- `lib/`: 取り込み側で使う helper
 - `files/`: 各種設定ファイル
+- `docs/`: 取り込み側での上書きガイド
 
 扱うのは、複数環境で使い回せる設定だけです。秘密情報やホスト固有の値は含めません。
 
@@ -64,16 +66,22 @@ import 例:
 ```text
 .
 ├── home.nix
+├── lib/
+│   ├── features.nix
+│   └── home-manager.nix
 ├── files/
 │   ├── aerospace/
+│   ├── espanso/
 │   ├── karabiner/
 │   ├── nushell/
 │   └── wezterm/
-└── modules/
-    ├── platform/
-    ├── programs/
-    ├── shell/
-    └── system/
+├── modules/
+│   ├── platform/
+│   ├── programs/
+│   ├── shell/
+│   └── system/
+└── docs/
+    └── overrides/
 ```
 
 ## 必要な引数
@@ -190,9 +198,9 @@ in
 
 このモジュールを取り込んで `system.defaults` を適用する場合、`darwin-rebuild` を実行するターミナルや Nix 関連プロセスに Full Disk Access が必要になることがあります。
 
-## 最小例
+## Standalone Home Manager の最小例
 
-親 flake から `shared` を読み込んで Home Manager に組み込む最小構成です。
+親 flake から `shared` を読み込んで、standalone Home Manager に組み込む最小構成です。
 
 ```nix
 {
@@ -237,5 +245,31 @@ in
         ];
       };
     };
+}
+```
+
+## NixOS / nix-darwin 統合の最小例
+
+NixOS / nix-darwin の module として Home Manager を組み込む場合は、
+`lib/home-manager.nix` の `default` を `home-manager` 設定に重ねます。
+
+```nix
+let
+  sharedHomeManager = import (shared + /lib/home-manager.nix);
+in
+{
+  modules = [
+    home-manager.nixosModules.home-manager
+    {
+      home-manager = sharedHomeManager.default // {
+        users.${username} = import ./home.nix;
+        extraSpecialArgs = {
+          inherit username homeDirectory features shared;
+          nixvim = inputs.nixvim;
+          yaziPlugins = inputs.yazi-plugins;
+        };
+      };
+    }
+  ];
 }
 ```
