@@ -267,7 +267,6 @@
           silent = true;
           lspBuf = {
             K = "hover";
-            "<leader>cr" = "rename";
           };
           diagnostic = {
             "<leader>cd" = "open_float";
@@ -283,27 +282,21 @@
             }
             {
               mode = "n";
-              key = "gr";
+              key = "grr";
               action.__raw = "function() Snacks.picker.lsp_references() end";
               options.desc = "References";
             }
             {
               mode = "n";
-              key = "gI";
+              key = "gri";
               action.__raw = "function() Snacks.picker.lsp_implementations() end";
               options.desc = "Goto Implementation";
             }
             {
               mode = "n";
-              key = "gy";
+              key = "grt";
               action.__raw = "function() Snacks.picker.lsp_type_definitions() end";
               options.desc = "Goto Type Definition";
-            }
-            {
-              mode = "n";
-              key = "<leader>ca";
-              action.__raw = "function() Snacks.picker.lsp_code_actions() end";
-              options.desc = "Code Action";
             }
           ];
         };
