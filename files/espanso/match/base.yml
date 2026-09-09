@@ -70,6 +70,8 @@ matches:
     replace: "承知しました"
   - trigger: ";chk"
     replace: "ご確認よろしくお願いします"
+  - trigger: ";y"
+    replace: "Yes"
 
   # 記号
   - trigger: ";;"
